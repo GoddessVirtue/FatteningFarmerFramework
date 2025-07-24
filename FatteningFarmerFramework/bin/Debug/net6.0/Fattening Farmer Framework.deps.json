@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Fattening Farmer Framework/1.0.0": {
+        "dependencies": {
+          "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": "4.1.0",
+          "Pathoschild.Stardew.ModBuildConfig": "4.4.0"
+        },
+        "runtime": {
+          "Fattening Farmer Framework.dll": {}
+        }
+      },
+      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/4.1.0": {
+        "runtime": {
+          "lib/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.20305.0"
+          }
+        }
+      },
+      "Pathoschild.Stardew.ModBuildConfig/4.4.0": {}
+    }
+  },
+  "libraries": {
+    "Fattening Farmer Framework/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o34xN9ugrjXCj45UuZhKjHzuxWCdrlWdqhzhVJ6J7a67djTFD6k+1WBm8Hz7Dbi+KQm98eUmlKEg3DsF1uqZow==",
+      "path": "microsoft.codedom.providers.dotnetcompilerplatform/4.1.0",
+      "hashPath": "microsoft.codedom.providers.dotnetcompilerplatform.4.1.0.nupkg.sha512"
+    },
+    "Pathoschild.Stardew.ModBuildConfig/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Yi7/8bZlLS1bqZxft1yZWxJmIBfIoRxQBFIwWrF0AjC4/j/HmWdDC7dbNzzM4ZtOTtjOAQ8AC7WjP6KHgLPpdg==",
+      "path": "pathoschild.stardew.modbuildconfig/4.4.0",
+      "hashPath": "pathoschild.stardew.modbuildconfig.4.4.0.nupkg.sha512"
+    }
+  }
+}

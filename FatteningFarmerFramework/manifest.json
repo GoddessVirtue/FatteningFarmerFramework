@@ -1,0 +1,10 @@
+{
+	"Name": "Fattening Farmer Framework",
+	"Author": "GoddessVirtue",
+	"Version": "1.3.0",
+	"Description": "The Fattening Farmer Framework includes all the program logic required to calculate the farmer's weight and change body and clothing sprites based on weight. No size assets are included with the base mod.",
+	"UniqueID": "GoddessVirtue.FatteningFarmerFramework",
+	"EntryDll": "FatteningFarmerFramework.dll",
+	"MinimumApiVersion": "4.0.0",
+	"UpdateKeys": ["Nexus:35379"]
+}

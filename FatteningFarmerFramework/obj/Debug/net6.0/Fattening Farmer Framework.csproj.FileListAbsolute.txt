@@ -1,0 +1,7 @@
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/bin/Debug/net6.0/Fattening Farmer Framework.dll
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.csproj.AssemblyReference.cache
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.AssemblyInfoInputs.cache
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.AssemblyInfo.cs
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.csproj.CoreCompileInputs.cache
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/Fattening Farmer Framework/obj/Debug/net6.0/Fattening Farmer Framework.dll

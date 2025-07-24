@@ -48,13 +48,13 @@
               "target": "Package",
               "version": "[2024.3.0, )"
             },
-            "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
-              "target": "Package",
-              "version": "[4.1.0, )"
-            },
             "Pathoschild.Stardew.ModBuildConfig": {
               "target": "Package",
               "version": "[4.4.0, )"
+            },
+            "System.CodeDom": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [

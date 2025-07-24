@@ -5,3 +5,4 @@
 /mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/FatteningFarmerFramework/obj/Debug/net6.0/FatteningFarmerFramework.AssemblyInfo.cs
 /mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/FatteningFarmerFramework/obj/Debug/net6.0/FatteningFarmerFramework.csproj.CoreCompileInputs.cache
 /mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/FatteningFarmerFramework/obj/Debug/net6.0/FatteningFarmerFramework.dll
+/mnt/home/viridian/Documents/18+/Stardew Mods/Fattening Farmer Framework/FatteningFarmerFramework/obj/Debug/net6.0/FatteningFarmerFramework.sourcelink.json

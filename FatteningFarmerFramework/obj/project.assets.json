@@ -15,26 +15,26 @@
           }
         }
       },
-      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/4.1.0": {
-        "type": "package",
-        "compile": {
-          "lib/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "build/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets": {}
-        }
-      },
       "Pathoschild.Stardew.ModBuildConfig/4.4.0": {
         "type": "package",
         "build": {
           "build/Pathoschild.Stardew.ModBuildConfig.targets": {}
+        }
+      },
+      "System.CodeDom/8.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/System.CodeDom.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/System.CodeDom.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
         }
       }
     }
@@ -63,55 +63,6 @@
         "readme.md"
       ]
     },
-    "Microsoft.CodeDom.Providers.DotNetCompilerPlatform/4.1.0": {
-      "sha512": "o34xN9ugrjXCj45UuZhKjHzuxWCdrlWdqhzhVJ6J7a67djTFD6k+1WBm8Hz7Dbi+KQm98eUmlKEg3DsF1uqZow==",
-      "type": "package",
-      "path": "microsoft.codedom.providers.dotnetcompilerplatform/4.1.0",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "build/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets",
-        "icons/dotnet.png",
-        "lib/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll",
-        "lib/net472/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml",
-        "microsoft.codedom.providers.dotnetcompilerplatform.4.1.0.nupkg.sha512",
-        "microsoft.codedom.providers.dotnetcompilerplatform.nuspec",
-        "tasks/DotNetCompilerPlatformTasks.dll",
-        "tasks/System.Management.dll",
-        "tools/Roslyn-4.1.0/Microsoft.Build.Tasks.CodeAnalysis.dll",
-        "tools/Roslyn-4.1.0/Microsoft.CSharp.Core.targets",
-        "tools/Roslyn-4.1.0/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
-        "tools/Roslyn-4.1.0/Microsoft.CodeAnalysis.CSharp.dll",
-        "tools/Roslyn-4.1.0/Microsoft.CodeAnalysis.Scripting.dll",
-        "tools/Roslyn-4.1.0/Microsoft.CodeAnalysis.VisualBasic.dll",
-        "tools/Roslyn-4.1.0/Microsoft.CodeAnalysis.dll",
-        "tools/Roslyn-4.1.0/Microsoft.DiaSymReader.Native.amd64.dll",
-        "tools/Roslyn-4.1.0/Microsoft.DiaSymReader.Native.x86.dll",
-        "tools/Roslyn-4.1.0/Microsoft.Managed.Core.CurrentVersions.targets",
-        "tools/Roslyn-4.1.0/Microsoft.Managed.Core.targets",
-        "tools/Roslyn-4.1.0/Microsoft.VisualBasic.Core.targets",
-        "tools/Roslyn-4.1.0/System.Buffers.dll",
-        "tools/Roslyn-4.1.0/System.Collections.Immutable.dll",
-        "tools/Roslyn-4.1.0/System.Memory.dll",
-        "tools/Roslyn-4.1.0/System.Numerics.Vectors.dll",
-        "tools/Roslyn-4.1.0/System.Reflection.Metadata.dll",
-        "tools/Roslyn-4.1.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "tools/Roslyn-4.1.0/System.Text.Encoding.CodePages.dll",
-        "tools/Roslyn-4.1.0/System.Threading.Tasks.Extensions.dll",
-        "tools/Roslyn-4.1.0/VBCSCompiler.exe",
-        "tools/Roslyn-4.1.0/VBCSCompiler.exe.config",
-        "tools/Roslyn-4.1.0/csc.exe",
-        "tools/Roslyn-4.1.0/csc.exe.config",
-        "tools/Roslyn-4.1.0/csc.rsp",
-        "tools/Roslyn-4.1.0/csi.exe",
-        "tools/Roslyn-4.1.0/csi.exe.config",
-        "tools/Roslyn-4.1.0/csi.rsp",
-        "tools/Roslyn-4.1.0/vbc.exe",
-        "tools/Roslyn-4.1.0/vbc.exe.config",
-        "tools/Roslyn-4.1.0/vbc.rsp"
-      ]
-    },
     "Pathoschild.Stardew.ModBuildConfig/4.4.0": {
       "sha512": "Yi7/8bZlLS1bqZxft1yZWxJmIBfIoRxQBFIwWrF0AjC4/j/HmWdDC7dbNzzM4ZtOTtjOAQ8AC7WjP6KHgLPpdg==",
       "type": "package",
@@ -131,13 +82,42 @@
         "pathoschild.stardew.modbuildconfig.4.4.0.nupkg.sha512",
         "pathoschild.stardew.modbuildconfig.nuspec"
       ]
+    },
+    "System.CodeDom/8.0.0": {
+      "sha512": "WTlRjL6KWIMr/pAaq3rYqh0TJlzpouaQ/W1eelssHgtlwHAH25jXTkUphTYx9HaIIf7XA6qs/0+YhtLEQRkJ+Q==",
+      "type": "package",
+      "path": "system.codedom/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.CodeDom.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.CodeDom.targets",
+        "lib/net462/System.CodeDom.dll",
+        "lib/net462/System.CodeDom.xml",
+        "lib/net6.0/System.CodeDom.dll",
+        "lib/net6.0/System.CodeDom.xml",
+        "lib/net7.0/System.CodeDom.dll",
+        "lib/net7.0/System.CodeDom.xml",
+        "lib/net8.0/System.CodeDom.dll",
+        "lib/net8.0/System.CodeDom.xml",
+        "lib/netstandard2.0/System.CodeDom.dll",
+        "lib/netstandard2.0/System.CodeDom.xml",
+        "system.codedom.8.0.0.nupkg.sha512",
+        "system.codedom.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "JetBrains.Annotations >= 2024.3.0",
-      "Microsoft.CodeDom.Providers.DotNetCompilerPlatform >= 4.1.0",
-      "Pathoschild.Stardew.ModBuildConfig >= 4.4.0"
+      "Pathoschild.Stardew.ModBuildConfig >= 4.4.0",
+      "System.CodeDom >= 8.0.0"
     ]
   },
   "packageFolders": {
@@ -187,13 +167,13 @@
             "target": "Package",
             "version": "[2024.3.0, )"
           },
-          "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
-            "target": "Package",
-            "version": "[4.1.0, )"
-          },
           "Pathoschild.Stardew.ModBuildConfig": {
             "target": "Package",
             "version": "[4.4.0, )"
+          },
+          "System.CodeDom": {
+            "target": "Package",
+            "version": "[8.0.0, )"
           }
         },
         "imports": [
@@ -221,17 +201,5 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.106/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform 4.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Microsoft.CodeDom.Providers.DotNetCompilerPlatform",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }

@@ -40,6 +40,12 @@ public sealed class ModConfig {
     }
 }
 
+public enum AppearanceType {
+    Body,
+    Shirt,
+    Pants
+}
+
 [UsedImplicitly]
 public sealed class IndividualItemSize {
     public readonly string ContentPackID;
@@ -540,8 +546,7 @@ internal sealed class ModEntry : Mod {
                     IAssetDataForImage editor = asset.AsImage();
                     Texture2D sourceImage = this.Helper.GameContent.Load<Texture2D>(texture);
                     editor.ExtendImage(minWidth: sourceImage.Width + xOffset, minHeight: sourceImage.Height + yOffset);
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace,
-                        targetArea: new Rectangle(xOffset, yOffset, sourceImage.Width, sourceImage.Height));
+                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(xOffset, yOffset, sourceImage.Width, sourceImage.Height));
                 });
             }
             else { //A content pack has registered a Fashion Sense appearance to use
@@ -619,6 +624,37 @@ internal sealed class ModEntry : Mod {
                 }
             }
         }
+    }
+
+    private void PatchSpritesheet(AssetRequestedEventArgs e, AppearanceType type, (int targetIndex, string sourceImage)[] patches) {
+        int spriteWidth, spriteHeight, spritesPerRow;
+        if (type == AppearanceType.Shirt) {
+            spriteWidth = 8;
+            spriteHeight = 8;
+            spritesPerRow = 16;
+        }
+        else if (type == AppearanceType.Pants) {
+            spriteWidth = 96;
+            spriteHeight = 672;
+            spritesPerRow = 20;
+        }
+        else {
+            this.Monitor.Log($"Tried to patch spritesheet {e.Name} but the appearance type {type} was unsupported",  LogLevel.Error);
+            return;
+        }
+
+        e.Edit(asset => { 
+            foreach ((int targetIndex, string sourceImage) in patches) {
+                IAssetDataForImage editor = asset.AsImage();
+                IRawTextureData sourceTexture = this.Helper.ModContent.Load<IRawTextureData>(sourceImage);
+                int xOffset = targetIndex % spritesPerRow * spriteWidth;
+                int yOffset = targetIndex / spritesPerRow * spriteHeight;
+                Rectangle destinationArea = new Rectangle(xOffset, yOffset, sourceTexture.Width, sourceTexture.Height);
+                
+                editor.ExtendImage(minWidth: sourceTexture.Width + xOffset, minHeight: sourceTexture.Height + yOffset);
+                editor.PatchImage(source: sourceTexture, patchMode: PatchMode.Replace, targetArea: destinationArea);
+            }
+        });
     }
 
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e) {

@@ -12,7 +12,4 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="/home/viridian/.nuget/packages/" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_CodeDom_Providers_DotNetCompilerPlatform Condition=" '$(PkgMicrosoft_CodeDom_Providers_DotNetCompilerPlatform)' == '' ">/home/viridian/.nuget/packages/microsoft.codedom.providers.dotnetcompilerplatform/4.1.0</PkgMicrosoft_CodeDom_Providers_DotNetCompilerPlatform>
-  </PropertyGroup>
 </Project>

@@ -508,11 +508,14 @@ internal sealed class ModEntry : Mod {
             //The game has requested a shirt asset
             Size shirtSize = playerStats.ShirtSize;
             Size bodySize = playerStats.BodySize;
+            List<(int, string)> patches = [];
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
                 //Remove the undershirt from the shirts texture
-                (int, string)[] patches = [(41, "assets/utilities/8x32_transparency.png"), (41, "assets/utilities/skin_tones.png")];
-                PatchSpritesheet(e, AppearanceType.Shirt, patches);
+                patches.Add((41, "assets/utilities/8x32_transparency.png")); 
+                patches.Add((41, "assets/utilities/skin_tones.png"));
+                PatchSpritesheet(e, AppearanceType.Shirt, patches.ToArray());
+                patches = [];
             }
             
             if (shirtSize.Weight == this._config.UnmoddedTextureWeight) {
@@ -520,9 +523,13 @@ internal sealed class ModEntry : Mod {
             }
 
             int shirtSpriteIndex = Game1.player.shirtItem.Value != null ? Game1.player.shirtItem.Value.indexInTileSheet.Value : 41;
-            if (!shirtSize.IndividualItemTextures.ContainsKey(shirtSpriteIndex) || string.IsNullOrEmpty(shirtSize.IndividualItemTextures[shirtSpriteIndex].Fashion)) {
-                this.Monitor.Log($"Loading shirt asset file: {shirtSize.Texture}", LogLevel.Trace);
-                PatchSpritesheet(e, AppearanceType.Shirt, [(shirtSpriteIndex, shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture)]);
+            if (!shirtSize.IndividualItemTextures.ContainsKey(shirtSpriteIndex) || string.IsNullOrEmpty(shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture)) {
+                this.Monitor.Log($"Loading shirts spritesheet: {shirtSize.Texture}", LogLevel.Trace);
+                patches.Add((0, shirtSize.Texture));
+            }
+            else if (string.IsNullOrEmpty(shirtSize.IndividualItemTextures[shirtSpriteIndex].Fashion)) {
+                this.Monitor.Log($"Loading shirt sprite: {shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture}", LogLevel.Trace);
+                patches.Add((shirtSpriteIndex, shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture));
             }
             else { //A content pack has registered a Fashion Sense appearance to use
                 string fashion = shirtSize.IndividualItemTextures[shirtSpriteIndex].Fashion;
@@ -541,17 +548,21 @@ internal sealed class ModEntry : Mod {
                     this.Monitor.Log($"Fashion Sense API reports success: {response.Value}", LogLevel.Debug);
                 }
             }
+            PatchSpritesheet(e, AppearanceType.Shirt, patches.ToArray());
         }
 
         if (e.Name.IsEquivalentTo("Characters/Farmer/Pants")) {
             //The game has requested a pants asset
             Size pantsSize = playerStats.PantsSize;
             Size bodySize = playerStats.BodySize;
+            List<(int, string)> patches = [];
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
                 //Remove the boxer shorts from the pants texture
-                (int, string)[] patches = [(28, "assets/utilities/96x688_transparency.png"), (29, "assets/utilities/96x688_transparency.png")];
-                PatchSpritesheet(e, AppearanceType.Pants, patches);
+                patches.Add((28, "assets/utilities/96x688_transparency.png"));
+                patches.Add((29, "assets/utilities/96x688_transparency.png"));
+                PatchSpritesheet(e, AppearanceType.Pants, patches.ToArray());
+                patches = [];
             }
             
             if (pantsSize.Weight == this._config.UnmoddedTextureWeight) {
@@ -559,9 +570,13 @@ internal sealed class ModEntry : Mod {
             }
             
             int pantsSpriteIndex = Game1.player.pantsItem.Value != null ? Game1.player.pantsItem.Value.indexInTileSheet.Value: 14;
-            if (!pantsSize.IndividualItemTextures.ContainsKey(pantsSpriteIndex) || string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion)) {
-                this.Monitor.Log($"Loading pants asset file: {bodySize.Texture}", LogLevel.Trace);
-                PatchSpritesheet(e, AppearanceType.Pants, [(pantsSpriteIndex, pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture)]);
+            if (!pantsSize.IndividualItemTextures.ContainsKey(pantsSpriteIndex) || string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture)) {
+                this.Monitor.Log($"Loading pants spritesheet: {bodySize.Texture}", LogLevel.Trace);
+                patches.Add((pantsSpriteIndex, bodySize.Texture));
+            }
+            else if (string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion)) {
+                this.Monitor.Log($"Loading pants sprite: {pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture}", LogLevel.Trace);
+                patches.Add((pantsSpriteIndex, pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture));
             }
             else { //A content pack has registered a Fashion Sense appearance to use
                 string fashion = pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion;
@@ -577,6 +592,7 @@ internal sealed class ModEntry : Mod {
                     this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
                 }
             }
+            PatchSpritesheet(e, AppearanceType.Pants, patches.ToArray());
         }
     }
 

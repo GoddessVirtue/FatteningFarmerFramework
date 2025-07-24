@@ -511,16 +511,8 @@ internal sealed class ModEntry : Mod {
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
                 //Remove the undershirt from the shirts texture
-                e.Edit(asset => {
-                    IAssetDataForImage editor = asset.AsImage();
-                    IRawTextureData sourceImage = this.Helper.ModContent.Load<IRawTextureData>("assets/utilities/8x32_transparency.png");
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(72, 64, 8, 32));
-                    
-                    //Add skin tones to the shirt texture data so the "sleeves" will be the colour of player skin
-                    IRawTextureData skinImage = this.Helper.ModContent.Load<IRawTextureData>("assets/utilities/skin_tones.png");
-                    editor.PatchImage(skinImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(72, 66, 1, 3));
-                });
-                
+                (int, string)[] patches = [(41, "assets/utilities/8x32_transparency.png"), (41, "assets/utilities/skin_tones.png")];
+                PatchSpritesheet(e, AppearanceType.Shirt, patches);
             }
             
             if (shirtSize.Weight == this._config.UnmoddedTextureWeight) {
@@ -529,25 +521,8 @@ internal sealed class ModEntry : Mod {
 
             int shirtSpriteIndex = Game1.player.shirtItem.Value != null ? Game1.player.shirtItem.Value.indexInTileSheet.Value : 41;
             if (!shirtSize.IndividualItemTextures.ContainsKey(shirtSpriteIndex) || string.IsNullOrEmpty(shirtSize.IndividualItemTextures[shirtSpriteIndex].Fashion)) {
-                string texture; int xOffset; int yOffset; //Time to change the shirt texture
-                if (shirtSize.IndividualItemTextures.ContainsKey(shirtSpriteIndex)) {
-                    texture = shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture;
-                    xOffset = shirtSpriteIndex % 16 * 8;
-                    yOffset = shirtSpriteIndex / 16 * 32;
-                }
-                else {
-                    texture = shirtSize.Texture;
-                    xOffset = 0;
-                    yOffset = 0;
-                }
-
                 this.Monitor.Log($"Loading shirt asset file: {shirtSize.Texture}", LogLevel.Trace);
-                e.Edit(asset => {
-                    IAssetDataForImage editor = asset.AsImage();
-                    Texture2D sourceImage = this.Helper.GameContent.Load<Texture2D>(texture);
-                    editor.ExtendImage(minWidth: sourceImage.Width + xOffset, minHeight: sourceImage.Height + yOffset);
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(xOffset, yOffset, sourceImage.Width, sourceImage.Height));
-                });
+                PatchSpritesheet(e, AppearanceType.Shirt, [(shirtSpriteIndex, shirtSize.IndividualItemTextures[shirtSpriteIndex].Texture)]);
             }
             else { //A content pack has registered a Fashion Sense appearance to use
                 string fashion = shirtSize.IndividualItemTextures[shirtSpriteIndex].Fashion;
@@ -575,12 +550,8 @@ internal sealed class ModEntry : Mod {
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
                 //Remove the boxer shorts from the pants texture
-                e.Edit(asset => {
-                    IAssetDataForImage editor = asset.AsImage();
-                    IRawTextureData sourceImage = this.Helper.ModContent.Load<IRawTextureData>("assets/utilities/96x672_transparency.png");
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(770, 704, 96, 672)); //male boxers
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(864, 704, 96, 672)); //female boxers
-                });
+                (int, string)[] patches = [(28, "assets/utilities/96x688_transparency.png"), (29, "assets/utilities/96x688_transparency.png")];
+                PatchSpritesheet(e, AppearanceType.Pants, patches);
             }
             
             if (pantsSize.Weight == this._config.UnmoddedTextureWeight) {
@@ -589,25 +560,8 @@ internal sealed class ModEntry : Mod {
             
             int pantsSpriteIndex = Game1.player.pantsItem.Value != null ? Game1.player.pantsItem.Value.indexInTileSheet.Value: 14;
             if (!pantsSize.IndividualItemTextures.ContainsKey(pantsSpriteIndex) || string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion)) {
-                string texture; int xOffset; int yOffset;
-                if (Game1.player.pantsItem.Value != null && pantsSize.IndividualItemTextures.ContainsKey(pantsSpriteIndex)) {
-                    texture = pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture;
-                    xOffset = pantsSpriteIndex % 10 * 192;
-                    yOffset = pantsSpriteIndex / 10 * 688;
-                }
-                else {
-                    texture = pantsSize.Texture;
-                    xOffset = 0;
-                    yOffset = 0;
-                }
-
                 this.Monitor.Log($"Loading pants asset file: {bodySize.Texture}", LogLevel.Trace);
-                e.Edit(asset => {
-                    IAssetDataForImage editor = asset.AsImage();
-                    Texture2D sourceImage = this.Helper.GameContent.Load<Texture2D>(texture);
-                    editor.ExtendImage(minWidth: sourceImage.Width + xOffset, minHeight: sourceImage.Height + yOffset);
-                    editor.PatchImage(sourceImage, patchMode: PatchMode.Replace, targetArea: new Rectangle(xOffset, yOffset, sourceImage.Width, sourceImage.Height));
-                });
+                PatchSpritesheet(e, AppearanceType.Pants, [(pantsSpriteIndex, pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture)]);
             }
             else { //A content pack has registered a Fashion Sense appearance to use
                 string fashion = pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion;
@@ -635,7 +589,7 @@ internal sealed class ModEntry : Mod {
         }
         else if (type == AppearanceType.Pants) {
             spriteWidth = 96;
-            spriteHeight = 672;
+            spriteHeight = 688;
             spritesPerRow = 20;
         }
         else {

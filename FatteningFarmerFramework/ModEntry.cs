@@ -571,8 +571,8 @@ internal sealed class ModEntry : Mod {
             
             int pantsSpriteIndex = Game1.player.pantsItem.Value != null ? Game1.player.pantsItem.Value.indexInTileSheet.Value: 14;
             if (!pantsSize.IndividualItemTextures.ContainsKey(pantsSpriteIndex) || string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture)) {
-                this.Monitor.Log($"Loading pants spritesheet: {bodySize.Texture}", LogLevel.Trace);
-                patches.Add((pantsSpriteIndex, bodySize.Texture));
+                this.Monitor.Log($"Loading pants spritesheet: {pantsSize.Texture}", LogLevel.Trace);
+                patches.Add((0, pantsSize.Texture));
             }
             else if (string.IsNullOrEmpty(pantsSize.IndividualItemTextures[pantsSpriteIndex].Fashion)) {
                 this.Monitor.Log($"Loading pants sprite: {pantsSize.IndividualItemTextures[pantsSpriteIndex].Texture}", LogLevel.Trace);
@@ -615,14 +615,19 @@ internal sealed class ModEntry : Mod {
 
         e.Edit(asset => { 
             foreach ((int targetIndex, string sourceImage) in patches) {
-                IAssetDataForImage editor = asset.AsImage();
-                IRawTextureData sourceTexture = this.Helper.ModContent.Load<IRawTextureData>(sourceImage);
-                int xOffset = targetIndex % spritesPerRow * spriteWidth;
-                int yOffset = targetIndex / spritesPerRow * spriteHeight;
-                Rectangle destinationArea = new Rectangle(xOffset, yOffset, sourceTexture.Width, sourceTexture.Height);
-                
-                editor.ExtendImage(minWidth: sourceTexture.Width + xOffset, minHeight: sourceTexture.Height + yOffset);
-                editor.PatchImage(source: sourceTexture, patchMode: PatchMode.Replace, targetArea: destinationArea);
+                try {
+                    IAssetDataForImage editor = asset.AsImage();
+                    Texture2D sourceTexture = this.Helper.ModContent.Load<Texture2D>(sourceImage);
+                    int xOffset = targetIndex % spritesPerRow * spriteWidth;
+                    int yOffset = targetIndex / spritesPerRow * spriteHeight;
+                    Rectangle destinationArea = new Rectangle(xOffset, yOffset, sourceTexture.Width, sourceTexture.Height);
+                    
+                    editor.ExtendImage(minWidth: sourceTexture.Width + xOffset, minHeight: sourceTexture.Height + yOffset);
+                    editor.PatchImage(source: sourceTexture, patchMode: PatchMode.Replace, targetArea: destinationArea);
+                }
+                catch (Exception ex) {
+                    this.Monitor.Log($"Tried to patch spritesheet {e.Name} with {sourceImage} starting at sprite {targetIndex} but there was an error:\n\t{ex.Message}", LogLevel.Error);
+                }
             }
         });
     }

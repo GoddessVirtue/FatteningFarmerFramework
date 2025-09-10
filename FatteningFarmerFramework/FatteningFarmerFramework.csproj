@@ -5,7 +5,7 @@
         <RootNamespace>FatteningFarmerFramework</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <GamePath>/mnt/greenstorage/Green Games/SteamLibrary/steamapps/common/Stardew Valley/</GamePath>
+        <GamePath>/mnt/greenstorage/Green Games/Steam/steamapps/common/Stardew Valley/</GamePath>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 

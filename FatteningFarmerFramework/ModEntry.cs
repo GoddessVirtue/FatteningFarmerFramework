@@ -496,12 +496,7 @@ internal sealed class ModEntry : Mod {
             }
 
             this.Monitor.Log($"Loading body asset file: {bodySize.Texture}", LogLevel.Trace);
-            e.Edit(asset => {
-                IAssetDataForImage editor = asset.AsImage();
-                Texture2D sourceImage = this.Helper.GameContent.Load<Texture2D>(bodySize.Texture);
-                editor.ExtendImage(minWidth: sourceImage.Width, minHeight: sourceImage.Height);
-                editor.PatchImage(sourceImage, patchMode: PatchMode.Replace);
-            });
+            PatchSpritesheet(e, AppearanceType.Body, [(0, bodySize.Texture)]);
         }
 
         if (e.Name.IsEquivalentTo("Characters/Farmer/shirts")) {
@@ -607,6 +602,11 @@ internal sealed class ModEntry : Mod {
             spriteWidth = 96;
             spriteHeight = 688;
             spritesPerRow = 20;
+        }
+        else if (type == AppearanceType.Body) {
+            spriteWidth = 16;
+            spriteHeight = 32;
+            spritesPerRow = 6;
         }
         else {
             this.Monitor.Log($"Tried to patch spritesheet {e.Name} but the appearance type {type} was unsupported",  LogLevel.Error);

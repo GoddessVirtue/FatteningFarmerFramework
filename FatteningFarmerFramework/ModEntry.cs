@@ -72,9 +72,12 @@ public class Size {
 }
 
 public class BodySize : Size {
-    public readonly bool Fashion; //If Fashion is true, then texture is a Fashion Sense asset, not a Stardew asset
+    public readonly string? Fashion; //If Fashion is true, then texture is a Fashion Sense asset, not a Stardew asset
     
-    public BodySize(int weight, string texture, bool fashion): base(weight, texture) {
+    public BodySize(int weight, string texture): base(weight, texture) {
+        this.Fashion = null;
+    }
+    public BodySize(int weight, string texture, string fashion): base(weight, texture) {
         this.Fashion = fashion;
     }
 }
@@ -109,7 +112,7 @@ public sealed class ModData {
     public ModData(ModConfig config) {
         this._config = config;
         this._weight = config.StartingWeight;
-        this.BodySize = new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base", false);
+        this.BodySize = new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base");
         this.ShirtSize = new ClothingSize(this._config.UnmoddedTextureWeight,"Characters/Farmer/shirts");
         this.PantsSize = new ClothingSize(this._config.UnmoddedTextureWeight,"Characters/Farmer/pants");
     }
@@ -141,9 +144,9 @@ internal sealed class ModEntry : Mod {
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e) {
         CreateConfigMenu();
         this._femaleBodySizes = Game1.content.Load<Dictionary<int, BodySize>>("Mods/FatteningFarmerFramework/Data/FemaleBodySizes").Values.ToArray();
-        this._femaleBodySizes = this._femaleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base", false)).ToArray();
+        this._femaleBodySizes = this._femaleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base")).ToArray();
         this._maleBodySizes = Game1.content.Load<Dictionary<int, BodySize>>("Mods/FatteningFarmerFramework/Data/MaleBodySizes").Values.ToArray();
-        this._maleBodySizes = this._maleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_base", false)).ToArray();
+        this._maleBodySizes = this._maleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_base")).ToArray();
         this._shirtSizes = Game1.content.Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/ShirtSizes").Values.ToArray();
         this._shirtSizes = this._shirtSizes.Append(new ClothingSize(this._config.UnmoddedTextureWeight, "Characters/Farmer/shirts")).ToArray();
         this._pantsSizes = Game1.content.Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/PantsSizes").Values.ToArray();
@@ -345,7 +348,7 @@ internal sealed class ModEntry : Mod {
             this.Monitor.Log($"Could not resolve body sizes for player gender {player.Gender}", LogLevel.Debug);
             return;
         }
-        BodySize bodySize = new BodySize(0, "", false);
+        BodySize bodySize = new BodySize(0, "");
         BodySize smallestBody = bodySizes[0];
         foreach (BodySize size in bodySizes) {
             if (this._config.StrictClothingCompatibility) { //We won't be using any body sizes that don't have a matching shirt and pants size
@@ -659,14 +662,14 @@ internal sealed class ModEntry : Mod {
                 this._femaleBodySizes = Game1.content
                     .Load<Dictionary<int, BodySize>>("Mods/FatteningFarmerFramework/Data/FemaleBodySizes").Values.ToArray();
                 this._femaleBodySizes = this._femaleBodySizes
-                    .Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base", false)).ToArray();
+                    .Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base")).ToArray();
             }
 
             if (name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/MaleBodySizes")) {
                 this._maleBodySizes = Game1.content
                     .Load<Dictionary<int, BodySize>>("Mods/FatteningFarmerFramework/Data/MaleBodySizes").Values.ToArray();
                 this._maleBodySizes = this._maleBodySizes
-                    .Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_base", false)).ToArray();
+                    .Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_base")).ToArray();
             }
 
             if (name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/ShirtSizes")) {

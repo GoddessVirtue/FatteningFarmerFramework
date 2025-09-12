@@ -617,7 +617,13 @@ internal sealed class ModEntry : Mod {
             foreach ((int targetIndex, string sourceImage) in patches) {
                 try {
                     IAssetDataForImage editor = asset.AsImage();
-                    Texture2D sourceTexture = this.Helper.ModContent.Load<Texture2D>(sourceImage);
+                    Texture2D sourceTexture;
+                    if (sourceImage.StartsWith("assets/") || sourceImage.EndsWith(".png")) { //If it's an image file from the FFF, use ModContent
+                        sourceTexture = this.Helper.ModContent.Load<Texture2D>(sourceImage);
+                    }
+                    else { //If it's an image asset loaded by a content pack, use GameContent
+                        sourceTexture = this.Helper.GameContent.Load<Texture2D>(sourceImage);
+                    }
                     int xOffset = targetIndex % spritesPerRow * spriteWidth;
                     int yOffset = targetIndex / spritesPerRow * spriteHeight;
                     Rectangle destinationArea = new Rectangle(xOffset, yOffset, sourceTexture.Width, sourceTexture.Height);

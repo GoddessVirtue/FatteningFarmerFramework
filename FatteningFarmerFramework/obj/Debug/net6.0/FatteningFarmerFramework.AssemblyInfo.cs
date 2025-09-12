@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FatteningFarmerFramework")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa21c5eeb6643b5ce51b8e7ce58651887df9c0ae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8cf60a0d2e55c9d2faa4e38652575f48bb1b6cf2")]
 [assembly: System.Reflection.AssemblyProductAttribute("FatteningFarmerFramework")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FatteningFarmerFramework")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -63,13 +63,11 @@ public class Size {
     public readonly int Weight;
     public readonly string ContentPackID;
     public readonly string Texture;
-    public readonly Dictionary<int, IndividualItemSize> IndividualItemTextures;
 
     public Size(int weight, string texture) {
         this.Weight = weight;
         this.ContentPackID = "";
         this.Texture = texture;
-        this.IndividualItemTextures = new Dictionary<int, IndividualItemSize>();
     }
 }
 
@@ -81,12 +79,21 @@ public class BodySize : Size {
     }
 }
 
+public class ClothingSize : Size {
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public readonly Dictionary<int, IndividualItemSize> IndividualItemTextures;
+
+    public ClothingSize(int weight, string texture) : base(weight, texture) {
+        this.IndividualItemTextures = new Dictionary<int, IndividualItemSize>();
+    }
+}
+
 public sealed class ModData {
     private readonly ModConfig _config;
     private double _weight;
-    public Size BodySize;
-    public Size ShirtSize;
-    public Size PantsSize;
+    public BodySize BodySize;
+    public ClothingSize ShirtSize;
+    public ClothingSize PantsSize;
     public double Weight {
         get => Math.Round(_weight, 2);
         set {
@@ -102,9 +109,9 @@ public sealed class ModData {
     public ModData(ModConfig config) {
         this._config = config;
         this._weight = config.StartingWeight;
-        this.BodySize = new Size(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base");
-        this.ShirtSize = new Size(this._config.UnmoddedTextureWeight,"Characters/Farmer/shirts");
-        this.PantsSize = new Size(this._config.UnmoddedTextureWeight,"Characters/Farmer/pants");
+        this.BodySize = new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base", false);
+        this.ShirtSize = new ClothingSize(this._config.UnmoddedTextureWeight,"Characters/Farmer/shirts");
+        this.PantsSize = new ClothingSize(this._config.UnmoddedTextureWeight,"Characters/Farmer/pants");
     }
 }
 
@@ -112,8 +119,8 @@ internal sealed class ModEntry : Mod {
     private ModConfig _config = new ModConfig();
     private BodySize[] _femaleBodySizes = [];
     private BodySize[] _maleBodySizes = [];
-    private Size[] _shirtSizes = [];
-    private Size[] _pantsSizes = [];
+    private ClothingSize[] _shirtSizes = [];
+    private ClothingSize[] _pantsSizes = [];
     private string _currentShirt = "";
     private string _currentPants = "";
     private Event? _atFestival = null;
@@ -137,10 +144,10 @@ internal sealed class ModEntry : Mod {
         this._femaleBodySizes = this._femaleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_girl_base", false)).ToArray();
         this._maleBodySizes = Game1.content.Load<Dictionary<int, BodySize>>("Mods/FatteningFarmerFramework/Data/MaleBodySizes").Values.ToArray();
         this._maleBodySizes = this._maleBodySizes.Append(new BodySize(this._config.UnmoddedTextureWeight, "Characters/Farmer/farmer_base", false)).ToArray();
-        this._shirtSizes = Game1.content.Load<Dictionary<int, Size>>("Mods/FatteningFarmerFramework/Data/ShirtSizes").Values.ToArray();
-        this._shirtSizes = this._shirtSizes.Append(new Size(this._config.UnmoddedTextureWeight, "Characters/Farmer/shirts")).ToArray();
-        this._pantsSizes = Game1.content.Load<Dictionary<int, Size>>("Mods/FatteningFarmerFramework/Data/PantsSizes").Values.ToArray();
-        this._pantsSizes = this._pantsSizes.Append(new Size(this._config.UnmoddedTextureWeight, "Characters/Farmer/pants")).ToArray();
+        this._shirtSizes = Game1.content.Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/ShirtSizes").Values.ToArray();
+        this._shirtSizes = this._shirtSizes.Append(new ClothingSize(this._config.UnmoddedTextureWeight, "Characters/Farmer/shirts")).ToArray();
+        this._pantsSizes = Game1.content.Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/PantsSizes").Values.ToArray();
+        this._pantsSizes = this._pantsSizes.Append(new ClothingSize(this._config.UnmoddedTextureWeight, "Characters/Farmer/pants")).ToArray();
 
         foreach (BodySize size in this._femaleBodySizes) {
             this.Monitor.Log($"Loaded female body size: {size.Weight}", LogLevel.Debug);
@@ -345,7 +352,7 @@ internal sealed class ModEntry : Mod {
                 bool underclothesEnabled = this._config.Nudity == 0 || (size.Weight == this._config.UnmoddedTextureWeight && this._config.Nudity == 1);
                 if (player.shirtItem.Value != null || underclothesEnabled){
                     bool shirtCompatible = false;
-                    foreach (Size sSize in _shirtSizes) {
+                    foreach (ClothingSize sSize in _shirtSizes) {
                         if (sSize.Weight == size.Weight) {
                             shirtCompatible = true;
                         }
@@ -359,7 +366,7 @@ internal sealed class ModEntry : Mod {
                 }
                 if (player.pantsItem.Value != null || underclothesEnabled){
                     bool pantsCompatible = false;
-                    foreach (Size pSize in _pantsSizes) {
+                    foreach (ClothingSize pSize in _pantsSizes) {
                         if (pSize.Weight == size.Weight) {
                             pantsCompatible = true;
                         }
@@ -384,13 +391,13 @@ internal sealed class ModEntry : Mod {
         this.Helper.Data.WriteSaveData<ModData>("player-stats",  playerStats);
 
         if (this._config.StrictClothingCompatibility) { //We already know shirt and pants size will be equal to body size
-            foreach (Size size in _shirtSizes) {
+            foreach (ClothingSize size in _shirtSizes) {
                 if (size.Weight == bodySize.Weight) {
                     playerStats.ShirtSize = size;
                     break;
                 }
             }
-            foreach (Size size in _pantsSizes) {
+            foreach (ClothingSize size in _pantsSizes) {
                 if (size.Weight == bodySize.Weight) {
                     playerStats.PantsSize = size;
                     break;
@@ -400,9 +407,9 @@ internal sealed class ModEntry : Mod {
         }
         else {
             int shirtSpriteIndex = Game1.player.shirtItem.Value != null ? Game1.player.shirtItem.Value.indexInTileSheet.Value : 41;
-            Size shirtSize = new Size(0, "");
-            Size smallestShirt = _shirtSizes[0];
-            foreach (Size size in _shirtSizes) {
+            ClothingSize shirtSize = new ClothingSize(0, "");
+            ClothingSize smallestShirt = _shirtSizes[0];
+            foreach (ClothingSize size in _shirtSizes) {
                 if (string.IsNullOrEmpty(size.Texture)) {
                     if (!size.IndividualItemTextures.ContainsKey(shirtSpriteIndex) || (string.IsNullOrEmpty(size.IndividualItemTextures[shirtSpriteIndex].Texture) && string.IsNullOrEmpty(size.IndividualItemTextures[shirtSpriteIndex].Fashion))) {
                         this.Monitor.Log(
@@ -428,9 +435,9 @@ internal sealed class ModEntry : Mod {
             this.Helper.Data.WriteSaveData<ModData>("player-stats", playerStats);
 
             int pantsSpriteIndex = Game1.player.pantsItem.Value != null ? Game1.player.pantsItem.Value.indexInTileSheet.Value: 14;
-            Size pantsSize = new Size(0, "");
-            Size smallestPants = _pantsSizes[0];
-            foreach (Size size in _pantsSizes) {
+            ClothingSize pantsSize = new ClothingSize(0, "");
+            ClothingSize smallestPants = _pantsSizes[0];
+            foreach (ClothingSize size in _pantsSizes) {
                 if (string.IsNullOrEmpty(size.Texture)) {
                     if (!size.IndividualItemTextures.ContainsKey(pantsSpriteIndex) || (string.IsNullOrEmpty(size.IndividualItemTextures[pantsSpriteIndex].Texture) && string.IsNullOrEmpty(size.IndividualItemTextures[pantsSpriteIndex].Texture))) {
                         this.Monitor.Log(
@@ -478,16 +485,16 @@ internal sealed class ModEntry : Mod {
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e) {
         if (e.Name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/FemaleBodySizes")) {
-            e.LoadFromModFile<Dictionary<int, Size>>("assets/data/female_body_sizes.json", AssetLoadPriority.Low);
+            e.LoadFromModFile<Dictionary<int, BodySize>>("assets/data/female_body_sizes.json", AssetLoadPriority.Low);
         }
         if (e.Name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/MaleBodySizes")) {
-            e.LoadFromModFile<Dictionary<int, Size>>("assets/data/male_body_sizes.json", AssetLoadPriority.Low);
+            e.LoadFromModFile<Dictionary<int, BodySize>>("assets/data/male_body_sizes.json", AssetLoadPriority.Low);
         }
         if (e.Name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/ShirtSizes")) {
-            e.LoadFromModFile<Dictionary<int, Size>>("assets/data/shirt_sizes.json", AssetLoadPriority.Low);
+            e.LoadFromModFile<Dictionary<int, ClothingSize>>("assets/data/shirt_sizes.json", AssetLoadPriority.Low);
         }
         if (e.Name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/PantsSizes")) {
-            e.LoadFromModFile<Dictionary<int, Size>>("assets/data/pants_sizes.json", AssetLoadPriority.Low);
+            e.LoadFromModFile<Dictionary<int, ClothingSize>>("assets/data/pants_sizes.json", AssetLoadPriority.Low);
         }
         
         if (!Context.IsWorldReady) {
@@ -498,7 +505,7 @@ internal sealed class ModEntry : Mod {
         if (e.Name.IsEquivalentTo("Characters/Farmer/farmer_base") || e.Name.IsEquivalentTo("Characters/Farmer/farmer_base_bald") 
                 || e.Name.IsEquivalentTo("Characters/Farmer/farmer_girl_base") || e.Name.IsEquivalentTo("Characters/Farmer/farmer_girl_base_bald")) {
             //The game has requested a body asset
-            Size bodySize = playerStats.BodySize;
+            BodySize bodySize = playerStats.BodySize;
             if (bodySize.Weight == this._config.UnmoddedTextureWeight) {
                 return; //The player's body size matches the vanilla textures, so the FFF should do nothing about body textures
             }
@@ -509,8 +516,8 @@ internal sealed class ModEntry : Mod {
 
         if (e.Name.IsEquivalentTo("Characters/Farmer/shirts")) {
             //The game has requested a shirt asset
-            Size shirtSize = playerStats.ShirtSize;
-            Size bodySize = playerStats.BodySize;
+            ClothingSize shirtSize = playerStats.ShirtSize;
+            BodySize bodySize = playerStats.BodySize;
             List<(int, string)> patches = [];
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
@@ -556,8 +563,8 @@ internal sealed class ModEntry : Mod {
 
         if (e.Name.IsEquivalentTo("Characters/Farmer/Pants")) {
             //The game has requested a pants asset
-            Size pantsSize = playerStats.PantsSize;
-            Size bodySize = playerStats.BodySize;
+            ClothingSize pantsSize = playerStats.PantsSize;
+            BodySize bodySize = playerStats.BodySize;
             List<(int, string)> patches = [];
             
             if (this._config.Nudity == 2 || (bodySize.Weight != this._config.UnmoddedTextureWeight && this._config.Nudity == 1)) {
@@ -664,16 +671,16 @@ internal sealed class ModEntry : Mod {
 
             if (name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/ShirtSizes")) {
                 this._shirtSizes = Game1.content
-                    .Load<Dictionary<int, Size>>("Mods/FatteningFarmerFramework/Data/ShirtSizes").Values.ToArray();
+                    .Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/ShirtSizes").Values.ToArray();
                 this._shirtSizes = this._shirtSizes
-                    .Append(new Size(this._config.UnmoddedTextureWeight, "Characters/Farmer/shirts")).ToArray();
+                    .Append(new ClothingSize(this._config.UnmoddedTextureWeight, "Characters/Farmer/shirts")).ToArray();
             }
 
             if (name.IsEquivalentTo("Mods/FatteningFarmerFramework/Data/PantsSizes")) {
                 this._pantsSizes = Game1.content
-                    .Load<Dictionary<int, Size>>("Mods/FatteningFarmerFramework/Data/PantsSizes").Values.ToArray();
+                    .Load<Dictionary<int, ClothingSize>>("Mods/FatteningFarmerFramework/Data/PantsSizes").Values.ToArray();
                 this._pantsSizes = this._pantsSizes
-                    .Append(new Size(this._config.UnmoddedTextureWeight, "Characters/Farmer/pants")).ToArray();
+                    .Append(new ClothingSize(this._config.UnmoddedTextureWeight, "Characters/Farmer/pants")).ToArray();
             }
         }
     }

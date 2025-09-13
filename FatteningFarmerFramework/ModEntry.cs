@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -72,11 +73,12 @@ public class Size {
 }
 
 public class BodySize : Size {
-    public readonly string? Fashion; //If Fashion is true, then texture is a Fashion Sense asset, not a Stardew asset
+    public readonly string? Fashion;
     
     public BodySize(int weight, string texture): base(weight, texture) {
         this.Fashion = null;
     }
+    [JsonConstructor]
     public BodySize(int weight, string texture, string fashion): base(weight, texture) {
         this.Fashion = fashion;
     }

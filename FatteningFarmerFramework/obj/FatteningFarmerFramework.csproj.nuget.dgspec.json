@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[2024.3.0, )"
             },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "Pathoschild.Stardew.ModBuildConfig": {
               "target": "Package",
               "version": "[4.4.0, )"

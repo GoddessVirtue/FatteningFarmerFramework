@@ -515,8 +515,26 @@ internal sealed class ModEntry : Mod {
                 return; //The player's body size matches the vanilla textures, so the FFF should do nothing about body textures
             }
 
-            this.Monitor.Log($"Loading body asset file: {bodySize.Texture}", LogLevel.Trace);
-            PatchSpritesheet(e, AppearanceType.Body, [(0, bodySize.Texture)]);
+            if (!string.IsNullOrEmpty(bodySize.Texture) && string.IsNullOrEmpty(bodySize.Fashion)) {
+                this.Monitor.Log($"Loading body asset file: {bodySize.Texture}", LogLevel.Trace);
+                PatchSpritesheet(e, AppearanceType.Body, [(0, bodySize.Texture)]);
+            }
+            else if (!string.IsNullOrEmpty(bodySize.Fashion)) {
+                this.Monitor.Log($"Loading body fashion: {bodySize.Fashion}", LogLevel.Trace);
+                IFashionSenseIApi? fashionSense = this.Helper.ModRegistry.GetApi<IFashionSenseIApi>("PeacefulEnd.FashionSense");
+                if (fashionSense == null) {
+                    this.Monitor.Log($"Fashion Sense is not installed but {bodySize.ContentPackID} tried to register a Fashion Sense appearance. " +
+                                     "Please install Fashion Sense at https://www.nexusmods.com/stardewvalley/mods/9969.", LogLevel.Error);
+                    return;
+                }
+                KeyValuePair<bool, string> response = fashionSense.SetAppearance(IFashionSenseIApi.Type.Player, bodySize.ContentPackID, bodySize.Fashion, this.ModManifest);
+                if (!response.Key) {
+                    this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
+                }
+            }
+            else {
+                this.Monitor.Log($"Tried to load body size {bodySize.Weight} but the size has no texture or fashion", LogLevel.Error);
+            }
         }
 
         if (e.Name.IsEquivalentTo("Characters/Farmer/shirts")) {

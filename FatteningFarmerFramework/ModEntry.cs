@@ -70,6 +70,12 @@ public class Size {
         this.ContentPackID = "";
         this.Texture = texture;
     }
+
+    public Size(int weight, string contentPackID, string texture) {
+        this.Weight = weight;
+        this.ContentPackID = contentPackID;
+        this.Texture = texture;
+    }
 }
 
 public class BodySize : Size {
@@ -79,7 +85,7 @@ public class BodySize : Size {
         this.Fashion = null;
     }
     [JsonConstructor]
-    public BodySize(int weight, string texture, string fashion): base(weight, texture) {
+    public BodySize(int weight, string contentPackID, string texture, string fashion): base(weight, contentPackID, texture) {
         this.Fashion = fashion;
     }
 }
@@ -527,7 +533,8 @@ internal sealed class ModEntry : Mod {
                                      "Please install Fashion Sense at https://www.nexusmods.com/stardewvalley/mods/9969.", LogLevel.Error);
                     return;
                 }
-                KeyValuePair<bool, string> response = fashionSense.SetAppearance(IFashionSenseIApi.Type.Player, bodySize.ContentPackID, bodySize.Fashion, this.ModManifest);
+                KeyValuePair<bool, string> response = fashionSense.SetAppearance(
+                    IFashionSenseIApi.Type.Player, bodySize.ContentPackID, bodySize.Fashion, this.ModManifest);
                 if (!response.Key) {
                     this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
                 }

@@ -538,6 +538,11 @@ internal sealed class ModEntry : Mod {
                 if (!response.Key) {
                     this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
                 }
+                response = fashionSense.SetAppearance(
+                    IFashionSenseIApi.Type.Sleeves, bodySize.ContentPackID, bodySize.Fashion, this.ModManifest);
+                if (!response.Key) {
+                    this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
+                }
             }
             else {
                 this.Monitor.Log($"Tried to load body size {bodySize.Weight} but the size has no texture or fashion", LogLevel.Error);
@@ -627,7 +632,7 @@ internal sealed class ModEntry : Mod {
                                      "Please install Fashion Sense at https://www.nexusmods.com/stardewvalley/mods/9969.", LogLevel.Error);
                     return;
                 }
-                KeyValuePair<bool, string> response = fashionSense.SetAppearance(IFashionSenseIApi.Type.Shirt, contentPackID, fashion, this.ModManifest);
+                KeyValuePair<bool, string> response = fashionSense.SetAppearance(IFashionSenseIApi.Type.Pants, contentPackID, fashion, this.ModManifest);
                 if (!response.Key) {
                     this.Monitor.Log($"Fashion Sense API reports problem: {response.Value}", LogLevel.Error);
                 }
